@@ -15,13 +15,18 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::select(Event::raw('DATE_FORMAT(datetime, "%Y-%m-%d %H") as hour'), Event::raw('count(*) as count'), 'value')
-            ->whereDate('datetime', '=', Carbon::yesterday()->toDateString())
-            ->groupBy('hour', 'value')
-            ->get();
+        //$events = Event::select(Event::raw('DATE_FORMAT(datetime, "%Y-%m-%d %H") as hour'), Event::raw('count(*) as count'), 'value')
+        //    ->whereDate('datetime', '=', Carbon::yesterday()->toDateString())
+        //    ->groupBy('hour', 'value')
+        //    ->get();
 
+        $events = Event::select(Event::raw('DATE_FORMAT(datetime, "%Y-%m-%d %H") as hour'), 'value as location', Event::raw('count(*) as count'))
+                    ->whereDate('datetime', '=', '2022-05-27')
+                    ->groupBy('location', 'hour')
+                    ->get();
+        
         return view('events.index', [
-            'events' => $events
+            'events' => $events,
         ]);
     }
 
